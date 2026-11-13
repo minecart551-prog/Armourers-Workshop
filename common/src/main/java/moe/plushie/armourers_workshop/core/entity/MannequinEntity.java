@@ -3,6 +3,7 @@ package moe.plushie.armourers_workshop.core.entity;
 import moe.plushie.armourers_workshop.api.common.IEntityDataBuilder;
 import moe.plushie.armourers_workshop.api.common.IEntityType;
 import moe.plushie.armourers_workshop.api.core.IDataCodec;
+import moe.plushie.armourers_workshop.api.core.IRegistryHolder;
 import moe.plushie.armourers_workshop.api.core.IDataSerializable;
 import moe.plushie.armourers_workshop.api.core.IDataSerializer;
 import moe.plushie.armourers_workshop.api.core.IDataSerializerKey;
@@ -27,6 +28,7 @@ import moe.plushie.armourers_workshop.init.ModMenuTypes;
 import moe.plushie.armourers_workshop.init.environment.EnvironmentExecutorIO;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -39,6 +41,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -152,8 +155,22 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
         super.abi$onSyncedDataUpdated(dataParameter);
     }
 
+    /**
+     * Checks whether the given player is allowed to use this mannequin.
+     * <p>
+     * The normal mannequin can only be used by survival players, the creative variant can only be used by creative players.
+     * </p>
+     */
+    public boolean isUsableBy(Player player) {
+        return !player.isCreative();
+    }
+
     @Override
     protected OpenInteractionResult abi$interactAt(Player player, Vec3 pos, OpenInteractionHand hand) {
+        if (!isUsableBy(player)) {
+            sendNoPermissionMessage(player);
+            return OpenInteractionResult.sidedSuccess(level().isClientSide());
+        }
         if (isMarker()) {
             return OpenInteractionResult.PASS;
         }
@@ -186,6 +203,11 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
 
     @Override
     public boolean abi$hurt(ServerLevel level, DamageSource source, float amount) {
+        // only players that are allowed to use this mannequin can damage or break it.
+        if (source.getEntity() instanceof Player player && !isUsableBy(player)) {
+            sendNoPermissionMessage(player);
+            return false;
+        }
         isDropEquipment = false;
         var oldAlive = abi$isAlive();
         var result = super.abi$hurt(level, source, amount);
@@ -195,6 +217,24 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
         return result;
     }
 
+    public void sendNoPermissionMessage(Player player) {
+        if (!player.level().isClientSide()) {
+            player.sendSystemMessage(Component.translatable(noPermissionMessageKey()));
+        }
+    }
+
+    public String noPermissionMessageKey() {
+        return "chat.armourers_workshop.mannequin.no-permission";
+    }
+
+    public IRegistryHolder<Item> mannequinItem() {
+        return ModItems.MANNEQUIN;
+    }
+
+    public IRegistryHolder<? extends IEntityType<? extends MannequinEntity>> mannequinEntityType() {
+        return ModEntityTypes.MANNEQUIN;
+    }
+
     @Override
     protected void abi$brokenByPlayer(ServerLevel serverLevel, DamageSource source) {
         // drop a mannequin item stack?
@@ -202,7 +242,7 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
             var entityData = new EntityData();
             entityData.setScale(getScale());
             entityData.setTexture(getTextureDescriptor());
-            Block.popResource(level(), blockPosition(), entityData.itemStack());
+            Block.popResource(level(), blockPosition(), entityData.itemStack(mannequinItem().get(), mannequinEntityType().get()));
         }
         abi$brokenByAnything(serverLevel, source);
     }
@@ -220,12 +260,12 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
 
     @Override
     protected ItemStack abi$getPickedResult(HitResult target) {
-        var itemStack = new ItemStack(ModItems.MANNEQUIN.get());
+        var itemStack = new ItemStack(mannequinItem().get());
         // yep, we need copy the fully model info when ctrl down.
         if (EnvironmentExecutorIO.hasControlDown()) {
             var serializer = new TagSerializer(SerializationContext.from(this));
             abi$writeAdditionalSaveData(serializer);
-            itemStack.set(ModDataComponents.ENTITY_DATA.get(), TypedEntityData.of(ModEntityTypes.MANNEQUIN.get(), serializer.tag()));
+            itemStack.set(ModDataComponents.ENTITY_DATA.get(), TypedEntityData.of(mannequinEntityType().get(), serializer.tag()));
         }
         return itemStack;
     }
@@ -474,16 +514,24 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
         }
 
         public TypedEntityData<IEntityType<?>> entityData() {
+            return entityData(ModEntityTypes.MANNEQUIN.get());
+        }
+
+        public TypedEntityData<IEntityType<?>> entityData(IEntityType<?> entityType) {
             var entityTag = serializer.tag().copy();
             if (entityTag.isEmpty()) {
                 return null;
             }
-            return TypedEntityData.of(ModEntityTypes.MANNEQUIN.get(), entityTag);
+            return TypedEntityData.of(entityType, entityTag);
         }
 
         public ItemStack itemStack() {
-            var itemStack = new ItemStack(ModItems.MANNEQUIN.get());
-            var entityData = entityData();
+            return itemStack(ModItems.MANNEQUIN.get(), ModEntityTypes.MANNEQUIN.get());
+        }
+
+        public ItemStack itemStack(Item item, IEntityType<?> entityType) {
+            var itemStack = new ItemStack(item);
+            var entityData = entityData(entityType);
             if (entityData != null) {
                 itemStack.set(ModDataComponents.ENTITY_DATA.get(), entityData);
             }

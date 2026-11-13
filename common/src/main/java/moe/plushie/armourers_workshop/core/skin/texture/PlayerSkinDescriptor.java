@@ -70,7 +70,7 @@ public class PlayerSkinDescriptor implements IDataSerializable.Immutable {
     }
 
     public static PlayerSkinDescriptor of(ItemStack itemStack) {
-        if (!itemStack.is(ModItems.MANNEQUIN.get())) {
+        if (!itemStack.is(ModItems.MANNEQUIN.get()) && !itemStack.is(ModItems.MANNEQUIN_CREATIVE.get())) {
             return DEFAULT;
         }
         var entityData = itemStack.get(ModDataComponents.ENTITY_DATA.get());

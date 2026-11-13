@@ -16,7 +16,7 @@ import moe.plushie.armourers_workshop.init.ModDebugger;
 import moe.plushie.armourers_workshop.init.ModTextures;
 
 @OnlyIn(Dist.CLIENT)
-public class MannequinEntityRenderer extends AbstractHumanoidEntityRenderer<MannequinEntity, MannequinRenderState, MannequinModel, MannequinArmorModel> {
+public class MannequinEntityRenderer<T extends MannequinEntity> extends AbstractHumanoidEntityRenderer<T, MannequinRenderState, MannequinModel<T>, MannequinArmorModel<T>> {
 
     public MannequinEntityRenderer(Context context) {
         super(context, MannequinModel::new, MannequinArmorModel::new, 0.0f);
@@ -37,7 +37,7 @@ public class MannequinEntityRenderer extends AbstractHumanoidEntityRenderer<Mann
     }
 
     @Override
-    protected boolean abi$shouldShowName(MannequinEntity entity, double d) {
+    protected boolean abi$shouldShowName(T entity, double d) {
         return entity.hasCustomName();
     }
 

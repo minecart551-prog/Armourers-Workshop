@@ -106,6 +106,10 @@ public class SkinWardrobeMenu extends ContainerMenu {
 
             @Override
             protected boolean abi$mayPlace(ItemStack itemStack) {
+                // only players that are allowed to use the mannequin can modify it.
+                if (wardrobe.entity() instanceof MannequinEntity mannequin && !mannequin.isUsableBy(player)) {
+                    return false;
+                }
                 // when onlySkinIntoSlots is enabled, we will can't accept non-skin item.
                 if (ModConfig.Common.onlySkinIntoSlots && !itemStack.is(ModItems.SKIN.get())) {
                     return false;
@@ -163,6 +167,10 @@ public class SkinWardrobeMenu extends ContainerMenu {
 
     @Override
     protected ItemStack abi$quickMoveStack(Player player, int index) {
+        // only players that are allowed to use the mannequin can modify it.
+        if (wardrobe.entity() instanceof MannequinEntity mannequin && !mannequin.isUsableBy(player)) {
+            return ItemStack.EMPTY;
+        }
         var slot = slots.get(index);
         if (!slot.hasItem()) {
             return ItemStack.EMPTY;

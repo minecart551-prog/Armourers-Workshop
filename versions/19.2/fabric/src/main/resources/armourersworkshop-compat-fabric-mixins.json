@@ -16,9 +16,7 @@
     "client/backpack/FabricTravelersBackpackRendererMixin",
     "client/backpack/FabricSophisticatedBackpackRendererMixin"
   ],
-  "mixins": [
-    "core/FabricEntityTypeBuilderMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   },

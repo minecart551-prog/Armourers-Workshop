@@ -20,6 +20,7 @@ import moe.plushie.armourers_workshop.core.item.FlavouredBlockItem;
 import moe.plushie.armourers_workshop.core.item.FlavouredItem;
 import moe.plushie.armourers_workshop.core.item.GiftSackItem;
 import moe.plushie.armourers_workshop.core.item.LinkingToolItem;
+import moe.plushie.armourers_workshop.core.item.MannequinCreativeItem;
 import moe.plushie.armourers_workshop.core.item.MannequinItem;
 import moe.plushie.armourers_workshop.core.item.MannequinToolItem;
 import moe.plushie.armourers_workshop.core.item.SkinItem;
@@ -45,6 +46,7 @@ public class ModItems {
 
     public static final IRegistryHolder<Item> SKIN = NONE.skin(ModBlocks.SKINNABLE).build("skin");
     public static final IRegistryHolder<Item> MANNEQUIN = MAIN.normal(MannequinItem::new).rarity(Rarity.RARE).build("mannequin");
+    public static final IRegistryHolder<Item> MANNEQUIN_CREATIVE = MAIN.normal(MannequinCreativeItem::new).rarity(Rarity.EPIC).build("mannequin-creative");
 
     public static final IRegistryHolder<Item> SKIN_LIBRARY = MAIN.block(ModBlocks.SKIN_LIBRARY).build("skin-library");
     public static final IRegistryHolder<Item> SKIN_LIBRARY_CREATIVE = MAIN.block(ModBlocks.SKIN_LIBRARY_CREATIVE).rarity(Rarity.EPIC).build("skin-library-creative");

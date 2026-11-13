@@ -19,7 +19,7 @@ public class SkinItemRenderer extends SpecialModelRenderer<ItemStack> {
     public static final IDataMapCodec<SkinItemRenderer> MAP_CODEC = IDataMapCodec.unit(SkinItemRenderer::new);
 
     private static ItemStack playerMannequinItem;
-    private static MannequinModel model;
+    private static MannequinModel<MannequinEntity> model;
 
     @Override
     protected void abi$render(ItemStack data, OpenItemDisplayContext itemDisplayContext, int lightmap, int overlay, IGraphicsContext context) {
@@ -31,7 +31,7 @@ public class SkinItemRenderer extends SpecialModelRenderer<ItemStack> {
         return itemStack;
     }
 
-    public static MannequinModel getMannequinModel() {
+    public static MannequinModel<MannequinEntity> getMannequinModel() {
         if (model == null) {
             model = MannequinModel.placeholder();
             model.setupDefault(MannequinRenderState.getPlaceholder());

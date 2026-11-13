@@ -61,6 +61,7 @@ public class CommonProxy {
 
         EventBus.register(RegisterEntityAttributesEvent.class, event -> {
             event.register(ModEntityTypes.MANNEQUIN.get().get(), MannequinEntity.createLivingAttributes());
+            event.register(ModEntityTypes.MANNEQUIN_CREATIVE.get().get(), MannequinEntity.createLivingAttributes());
             event.register(ModEntityTypes.SEAT.get().get(), SeatEntity.createLivingAttributes());
         });
 

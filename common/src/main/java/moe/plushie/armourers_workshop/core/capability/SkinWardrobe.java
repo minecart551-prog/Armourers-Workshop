@@ -6,6 +6,7 @@ import moe.plushie.armourers_workshop.core.data.EntityCollisionContainer;
 import moe.plushie.armourers_workshop.core.data.EntityCollisionShape;
 import moe.plushie.armourers_workshop.core.data.EntityDataStorage;
 import moe.plushie.armourers_workshop.core.data.SimpleContainer;
+import moe.plushie.armourers_workshop.core.entity.MannequinEntity;
 import moe.plushie.armourers_workshop.core.entity.EntityProfile;
 import moe.plushie.armourers_workshop.core.menu.SkinSlotType;
 import moe.plushie.armourers_workshop.core.network.UpdateWardrobePacket;
@@ -231,11 +232,15 @@ public class SkinWardrobe implements IDataSerializable.Mutable {
     }
 
     public boolean isEditable(Player player) {
-        if (!ModPermissions.OPEN.accept(ModMenuTypes.WARDROBE, entity(), player)) {
+        var entity = entity();
+        // only players that are allowed to use the mannequin can edit its wardrobe.
+        if (entity instanceof MannequinEntity mannequin && !mannequin.isUsableBy(player)) {
+            return false;
+        }
+        if (!ModPermissions.OPEN.accept(ModMenuTypes.WARDROBE, entity, player)) {
             return false;
         }
         // can't edit another player's wardrobe
-        var entity = entity();
         if (entity instanceof Player && entity.getId() != player.getId()) {
             return false;
         }

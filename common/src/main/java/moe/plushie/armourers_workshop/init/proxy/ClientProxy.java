@@ -191,7 +191,7 @@ public class ClientProxy {
             //     }
             // }
             var itemStack = player.getMainHandItem();
-            if (ModConfig.Client.enableEntityPlacementHighlight && itemStack.is(ModItems.MANNEQUIN.get())) {
+            if (ModConfig.Client.enableEntityPlacementHighlight && (itemStack.is(ModItems.MANNEQUIN.get()) || itemStack.is(ModItems.MANNEQUIN_CREATIVE.get()))) {
                 HighlightPlacementRenderer.renderEntity(player, hitResult, event.camera(), event.context());
             }
             if (ModConfig.Client.enableBlockPlacementHighlight && itemStack.is(ModItems.SKIN.get())) {

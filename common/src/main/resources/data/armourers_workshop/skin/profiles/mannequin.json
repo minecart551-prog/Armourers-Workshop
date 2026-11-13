@@ -9,6 +9,7 @@
     "backpack": 1
   },
   "entities": [
-    "armourers_workshop:mannequin"
+    "armourers_workshop:mannequin",
+    "armourers_workshop:mannequin-creative"
   ]
 }

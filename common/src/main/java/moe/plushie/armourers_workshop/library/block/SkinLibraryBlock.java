@@ -11,6 +11,7 @@ import moe.plushie.armourers_workshop.init.ModMenuTypes;
 import moe.plushie.armourers_workshop.library.blockentity.SkinLibraryBlockEntity;
 import moe.plushie.armourers_workshop.utils.DataSerializers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,6 +34,13 @@ public class SkinLibraryBlock extends AbstractHorizontalBlock implements Abstrac
     @Override
     protected OpenInteractionResult abi$useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, OpenInteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (this == ModBlocks.SKIN_LIBRARY_CREATIVE.get()) {
+            // only creative players can open the creative skin library.
+            if (!player.isCreative()) {
+                if (!level.isClientSide()) {
+                    player.sendSystemMessage(Component.translatable("chat.armourers_workshop.skin-library-creative.no-permission"));
+                }
+                return OpenInteractionResult.CONSUME;
+            }
             return player.openMenu(ModMenuTypes.SKIN_LIBRARY_CREATIVE, level, blockPos);
         }
         if (this == ModBlocks.SKIN_LIBRARY.get()) {

@@ -7,7 +7,7 @@ import moe.plushie.armourers_workshop.core.client.render.state.MannequinRenderSt
 import moe.plushie.armourers_workshop.core.entity.MannequinEntity;
 
 @OnlyIn(Dist.CLIENT)
-public class MannequinArmorModel extends AbstractHumanoidArmourModel<MannequinEntity, MannequinRenderState> {
+public class MannequinArmorModel<T extends MannequinEntity> extends AbstractHumanoidArmourModel<T, MannequinRenderState> {
 
     public MannequinArmorModel(Context context) {
         super(context);

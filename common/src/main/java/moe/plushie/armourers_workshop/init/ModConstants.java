@@ -19,6 +19,7 @@ public class ModConstants {
     public static final String MOD_NET_ID = "3.17";
 
     public static final String ENTITY_MANNEQUIN = entityType("mannequin");
+    public static final String ENTITY_MANNEQUIN_CREATIVE = entityType("mannequin-creative");
     public static final String ENTITY_SEAT = entityType("seat");
 
     public static final String BLOCK_HOLOGRAM_PROJECTOR = blockEntityType("hologram-projector");

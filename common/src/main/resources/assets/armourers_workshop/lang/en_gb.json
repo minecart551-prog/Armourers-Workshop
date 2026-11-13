@@ -379,9 +379,15 @@
   "item.armourers_workshop.mannequin": "Mannequin",
   "item.armourers_workshop.mannequin.big": "Giant",
   "item.armourers_workshop.mannequin.big.flavour": "Look at the size of that thing!",
-  "item.armourers_workshop.mannequin.flavour": "Show your equipment off with a creepy mannequin!",
+  "item.armourers_workshop.mannequin.flavour": "Show your equipment off with a creepy mannequin!\nSurvival mode only.",
   "item.armourers_workshop.mannequin.small": "Doll",
   "item.armourers_workshop.mannequin.small.flavour": "Mini mannequin!",
+  "item.armourers_workshop.mannequin-creative": "Mannequin - (Creative)",
+  "item.armourers_workshop.mannequin-creative.big": "Giant - (Creative)",
+  "item.armourers_workshop.mannequin-creative.big.flavour": "Look at the size of that thing!\nCreative mode only.",
+  "item.armourers_workshop.mannequin-creative.flavour": "Show your equipment off with a creepy mannequin!\nCreative mode only.",
+  "item.armourers_workshop.mannequin-creative.small": "Doll - (Creative)",
+  "item.armourers_workshop.mannequin-creative.small.flavour": "Mini mannequin!\nCreative mode only.",
   "item.armourers_workshop.mannequin-tool": "Mannequin Tool",
   "item.armourers_workshop.mannequin-tool.flavour": "Save and load mannequin rotations.\nRight click to apply setting.\nSneak right click to save settings.",
   "item.armourers_workshop.paint-roller": "Paint Roller",
@@ -545,5 +551,8 @@
   "inventory.armourers_workshop.toolOptions.intensity": "Intensity",
   "inventory.armourers_workshop.toolOptions.planeRestrict": "Restrict Plane",
   "inventory.armourers_workshop.toolOptions.radius": "Radius",
-  "inventory.armourers_workshop.toolOptions.sampleRadius": "Sample Radius"
+  "inventory.armourers_workshop.toolOptions.sampleRadius": "Sample Radius",
+  "chat.armourers_workshop.mannequin-creative.no-permission": "Only creative mode players can use this mannequin",
+  "chat.armourers_workshop.mannequin.no-permission": "Only survival mode players can use this mannequin",
+  "chat.armourers_workshop.skin-library-creative.no-permission": "Only creative mode players can use this library"
 }

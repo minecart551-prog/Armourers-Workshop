@@ -7,14 +7,14 @@ import moe.plushie.armourers_workshop.core.client.render.state.MannequinRenderSt
 import moe.plushie.armourers_workshop.core.entity.MannequinEntity;
 
 @OnlyIn(Dist.CLIENT)
-public class MannequinModel extends AbstractHumanoidModel<MannequinEntity, MannequinRenderState> {
+public class MannequinModel<T extends MannequinEntity> extends AbstractHumanoidModel<T, MannequinRenderState> {
 
     public MannequinModel(Context context) {
         super(context);
     }
 
-    public static MannequinModel placeholder() {
-        return new MannequinModel(getEmptyContext());
+    public static MannequinModel<MannequinEntity> placeholder() {
+        return new MannequinModel<>(getEmptyContext());
     }
 
     @Override

@@ -218,6 +218,7 @@ public class TestRegistryCase {
         assertPrintLog("Registering Item 'armourers_workshop:skin'");
         assertPrintLog("Registering Item 'armourers_workshop:mannequin'");
         assertPrintLog("Registering Item 'armourers_workshop:skin-library'");
+        assertPrintLog("Registering Item 'armourers_workshop:mannequin-creative'");
         assertPrintLog("Registering Item 'armourers_workshop:skin-library-creative'");
         assertPrintLog("Registering Item 'armourers_workshop:skin-library-global'");
         assertPrintLog("Registering Item 'armourers_workshop:skinning-table'");
@@ -334,6 +335,7 @@ public class TestRegistryCase {
     @Test
     public void testEntityTypeRegisters() {
         assertPrintLog("Registering Entity Type 'armourers_workshop:mannequin'");
+        assertPrintLog("Registering Entity Type 'armourers_workshop:mannequin-creative'");
         assertPrintLog("Registering Entity Type 'armourers_workshop:seat'");
     }
 

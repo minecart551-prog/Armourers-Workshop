@@ -8,7 +8,6 @@ import moe.plushie.armourers_workshop.core.utils.OpenInteractionHand;
 import moe.plushie.armourers_workshop.core.utils.OpenInteractionResult;
 import moe.plushie.armourers_workshop.core.utils.TranslateUtils;
 import moe.plushie.armourers_workshop.init.ModDataComponents;
-import moe.plushie.armourers_workshop.init.ModEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,11 +26,16 @@ public class MannequinToolItem extends ConfigurableToolItem {
     @Override
     protected OpenInteractionResult abi$interactLivingEntity(ItemStack itemStack, Player player, LivingEntity entity, OpenInteractionHand hand) {
         if (entity instanceof MannequinEntity mannequinEntity) {
+            // only players that are allowed to use the mannequin can modify it.
+            if (!mannequinEntity.isUsableBy(player)) {
+                mannequinEntity.sendNoPermissionMessage(player);
+                return OpenInteractionResult.sidedSuccess(player.level().isClientSide());
+            }
             if (player.isSecondaryUseActive()) {
                 var config = new CompoundTag();
                 var newItemStack = itemStack.copy();
                 mannequinEntity.saveMannequinToolData(config);
-                newItemStack.set(ModDataComponents.ENTITY_DATA.get(), TypedEntityData.of(ModEntityTypes.MANNEQUIN.get(), config));
+                newItemStack.set(ModDataComponents.ENTITY_DATA.get(), TypedEntityData.of(mannequinEntity.mannequinEntityType().get(), config));
                 player.setItemInHand(hand, newItemStack);
                 return OpenInteractionResult.sidedSuccess(player.level().isClientSide());
             } else {

@@ -2,6 +2,8 @@ package moe.plushie.armourers_workshop.core.item;
 
 import moe.plushie.armourers_workshop.api.common.ITooltipContext;
 import moe.plushie.armourers_workshop.api.common.IUseOnContext;
+import moe.plushie.armourers_workshop.api.common.IEntityType;
+import moe.plushie.armourers_workshop.api.core.IRegistryHolder;
 import moe.plushie.armourers_workshop.core.data.MannequinHitResult;
 import moe.plushie.armourers_workshop.core.entity.MannequinEntity;
 import moe.plushie.armourers_workshop.core.math.OpenVector3d;
@@ -19,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -27,6 +30,19 @@ public class MannequinItem extends FlavouredItem {
 
     public MannequinItem(Properties properties) {
         super(properties);
+    }
+
+    protected IRegistryHolder<? extends IEntityType<? extends MannequinEntity>> entityType() {
+        return ModEntityTypes.MANNEQUIN;
+    }
+
+    protected boolean isUsableBy(Player player) {
+        // the normal mannequin can only be used by survival players, the creative variant can only be used by creative players.
+        return !player.isCreative();
+    }
+
+    protected String noPermissionMessageKey() {
+        return "chat.armourers_workshop.mannequin.no-permission";
     }
 
     public static boolean isSmall(ItemStack itemStack) {
@@ -56,12 +72,18 @@ public class MannequinItem extends FlavouredItem {
         if (player == null) {
             return OpenInteractionResult.FAIL;
         }
+        if (!isUsableBy(player)) {
+            if (!context.level().isClientSide()) {
+                player.sendSystemMessage(Component.translatable(noPermissionMessageKey()));
+            }
+            return OpenInteractionResult.FAIL;
+        }
         var level = context.level();
         var origin = new OpenVector3d(player.getX(), player.getY(), player.getZ());
         var rayTraceResult = MannequinHitResult.test(player, origin, context.clickLocation(), context.clickedPos());
         var itemStack = context.itemInHand();
         if (level instanceof ServerLevel serverLevel) {
-            var entity = ModEntityTypes.MANNEQUIN.get().create(serverLevel, rayTraceResult.getBlockPos(), itemStack, OpenEntitySpawnReason.SPAWN_ITEM_USE);
+            var entity = entityType().get().create(serverLevel, rayTraceResult.getBlockPos(), itemStack, OpenEntitySpawnReason.SPAWN_ITEM_USE);
             if (entity == null) {
                 return OpenInteractionResult.FAIL;
             }

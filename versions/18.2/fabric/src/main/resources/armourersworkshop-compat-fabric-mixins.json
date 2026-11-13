@@ -14,9 +14,7 @@
     "client/dynamiclight/FabricLambDynamicLightsMixin$BlockEntityLightHandler",
     "client/backpack/FabricTravelersBackpackRendererMixin"
   ],
-  "mixins": [
-    "core/FabricEntityTypeBuilderMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   },
