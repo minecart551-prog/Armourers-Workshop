@@ -33,6 +33,11 @@ public class MannequinCreativeEntity extends MannequinEntity {
     }
 
     @Override
+    protected boolean shouldDropEquipment() {
+        return false;
+    }
+
+    @Override
     public boolean isUsableBy(Player player) {
         return player.isCreative();
     }

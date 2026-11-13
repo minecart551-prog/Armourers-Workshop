@@ -249,6 +249,10 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
 
     @Override
     protected void abi$dropEquipment(ServerLevel level) {
+        // creative mannequins drop nothing when they are broken.
+        if (!shouldDropEquipment()) {
+            return;
+        }
         super.abi$dropEquipment(level);
         this.isDropEquipment = true;
         // drop all wardrobe items.
@@ -256,6 +260,10 @@ public class MannequinEntity extends AbstractArmorStand implements IDataSerializ
         if (wardrobe != null) {
             wardrobe.dropAll(it -> spawnAtLocation(level, it));
         }
+    }
+
+    protected boolean shouldDropEquipment() {
+        return true;
     }
 
     @Override
